@@ -1,66 +1,16 @@
-## Foundry
+# Decentralized Bank (AAVE)
+This repository contains the code and the corresponding testing for the creation of a Smart Contract that works as a decentralized bank, allowing you to deposit and withdraw $DAI, as well as request loans in $USDC.
+This repository contains part of the code used for the second part of my medium post "[From Banking Theory to Blockchain Reality: Creating a Decentralized Bank with Solidity (part 1)] (https://medium.com/@numacodes/extrapolating-concepts-to-web3-coding-and-understanding-a-decentralized-bank-using-solidity-69797a771c47)" in which I explain how Traditional Banks work, and how they are different from Decentralized Banks.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Roadmap
+- [x] Write Smart Contract
+- [x] Deployment Scripts
+- [ ] Function and code testing
+- [ ] Mainnet/Testnet testing
+- [ ] Polish Markdown 
 
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+## Tests:
+- Should deposit DAI
+- Should withdraw DAI
+- User should be able to receive USDC
+- User should be able to repay USDC
