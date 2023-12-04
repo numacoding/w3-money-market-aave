@@ -33,51 +33,51 @@ contract AaveBank {
         aavePool = IPool(_poolAddress);
     }
 
-    function depositDai(uint amount) external {
-        if (dai.balanceOf(msg.sender) < amount) {
+    function depositDai(uint _amount) external {
+        if (dai.balanceOf(msg.sender) < _amount) {
             revert AaveBank__UserWithInsufficientFunds();
         }
 
-        s_depositedAmount[msg.sender] += amount;
+        s_depositedAmount[msg.sender] += _amount;
 
         //@audit-issue ver si acá tengo que hacer un transferFrom o si la función supply() lo hace por mi
-        dai.transferFrom(msg.sender, address(this), amount);
+        dai.transferFrom(msg.sender, address(this), _amount);
 
-        dai.approve(address(aavePool), amount);
-        aavePool.supply(address(dai), amount, address(this), 0);
+        dai.approve(address(aavePool), _amount);
+        aavePool.supply(address(dai), _amount, address(this), 0);
     }
 
-    function withdrawDai(uint amount) external {
-        if (s_depositedAmount[msg.sender] < amount) {
+    function withdrawDai(uint _amount) external {
+        if (s_depositedAmount[msg.sender] < _amount) {
             revert AaveBank__NotEnoughCollateral();
         }
 
-        s_depositedAmount[msg.sender] -= amount;
+        s_depositedAmount[msg.sender] -= _amount;
 
-        aavePool.withdraw(address(dai), amount, msg.sender);
+        aavePool.withdraw(address(dai), _amount, msg.sender);
     }
 
-    function borrowUsdc(uint amount) external {
-        if (s_depositedAmount[msg.sender] < amount) {
+    function borrowUsdc(uint _amount) external {
+        if (s_depositedAmount[msg.sender] < _amount) {
             revert AaveBank__NotEnoughCollateral();
         }
 
-        s_borrowedAmount[msg.sender] += amount;
+        s_borrowedAmount[msg.sender] += _amount;
 
-        aavePool.borrow(address(usdc), amount, 2, 0, address(this));
+        aavePool.borrow(address(usdc), _amount, 2, 0, address(this));
 
-        usdc.transfer(msg.sender, amount);
+        usdc.transfer(msg.sender, _amount);
     }
 
     // @audit-issue Ver cómo hacer esta transferencia
-    function repayUsdc(uint amount) external {
-        if (s_borrowedAmount[msg.sender] < amount) {
+    function repayUsdc(uint _amount) external {
+        if (s_borrowedAmount[msg.sender] < _amount) {
             revert AaveBank__DebtOverpay();
         }
 
-        require(usdc.balanceOf(msg.sender) >= amount, "Not enough DAI");
+        require(usdc.balanceOf(msg.sender) >= _amount, "Not enough DAI");
 
-        s_borrowedAmount[msg.sender] -= amount;
+        s_borrowedAmount[msg.sender] -= _amount;
 
         //usdc.approve(address(this), amount);
         usdc.transferFrom(msg.sender, address(this), amount);
