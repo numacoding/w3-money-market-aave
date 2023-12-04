@@ -4,10 +4,11 @@ pragma solidity ^0.8.19;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IPool} from "./InterfacePool.sol";
 
-/// @title A title that should describe the contract/interface
+/// @title Decentralized Bank
 /// @author Numa
-/// @notice Explain to an end user what this does
-/// @dev Explain to a developer any extra details
+/// @notice Decentralized Bank using AAVE protocol. It allows to deposit and withdraw $DAI,
+/// also allows users to ask for $USDC loans
+/// @dev using AAVE protocol
 
 contract AaveBank {
     error AaveBank__UserWithInsufficientFunds();
@@ -36,10 +37,7 @@ contract AaveBank {
         if (dai.balanceOf(msg.sender) < amount) {
             revert AaveBank__UserWithInsufficientFunds();
         }
-        // require(
-        //     dai.balanceOf(msg.sender) >= amount,
-        //     "Insuficient funds. Buy more USDC"
-        // );
+
         s_depositedAmount[msg.sender] += amount;
 
         //@audit-issue ver si acá tengo que hacer un transferFrom o si la función supply() lo hace por mi
@@ -53,10 +51,6 @@ contract AaveBank {
         if (s_depositedAmount[msg.sender] < amount) {
             revert AaveBank__NotEnoughCollateral();
         }
-        // require(
-        //     s_depositedAmount[msg.sender] >= amount,
-        //     "You don't have enough balance"
-        // );
 
         s_depositedAmount[msg.sender] -= amount;
 
@@ -67,10 +61,6 @@ contract AaveBank {
         if (s_depositedAmount[msg.sender] < amount) {
             revert AaveBank__NotEnoughCollateral();
         }
-        // require(
-        //     s_depositedAmount[msg.sender] >= amount,
-        //     "Not enough Collateral"
-        // );
 
         s_borrowedAmount[msg.sender] += amount;
 
@@ -84,10 +74,7 @@ contract AaveBank {
         if (s_borrowedAmount[msg.sender] < amount) {
             revert AaveBank__DebtOverpay();
         }
-        // require(
-        //     s_borrowedAmount[msg.sender] >= amount,
-        //     "You don't have that much debt"
-        // );
+
         require(usdc.balanceOf(msg.sender) >= amount, "Not enough DAI");
 
         s_borrowedAmount[msg.sender] -= amount;
