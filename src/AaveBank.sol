@@ -7,7 +7,9 @@ import {IPool} from "./InterfacePool.sol";
 /// @title Decentralized Bank
 /// @author Numa
 /// @notice Decentralized Bank using AAVE protocol. It allows to deposit and withdraw $DAI,
-/// also allows users to ask for $USDC loans
+/// also allows users to ask for $USDC loans.
+/// Check https://medium.com/@numacodes/extrapolating-concepts-to-web3-coding-and-understanding-a-decentralized-bank-using-solidity-69797a771c47
+/// for the project details
 /// @dev using AAVE protocol
 
 contract AaveBank {
@@ -40,7 +42,7 @@ contract AaveBank {
 
         s_depositedAmount[msg.sender] += _amount;
 
-        //@audit-issue ver si acá tengo que hacer un transferFrom o si la función supply() lo hace por mi
+        /// @notice this requires a previous approval from the user
         dai.transferFrom(msg.sender, address(this), _amount);
 
         dai.approve(address(aavePool), _amount);
@@ -69,7 +71,6 @@ contract AaveBank {
         usdc.transfer(msg.sender, _amount);
     }
 
-    // @audit-issue Ver cómo hacer esta transferencia
     function repayUsdc(uint _amount) external {
         if (s_borrowedAmount[msg.sender] < _amount) {
             revert AaveBank__DebtOverpay();
@@ -79,7 +80,7 @@ contract AaveBank {
 
         s_borrowedAmount[msg.sender] -= _amount;
 
-        //usdc.approve(address(this), amount);
+        /// @notice this requires a previous approval from the user
         usdc.transferFrom(msg.sender, address(this), amount);
 
         usdc.approve(address(aavePool), amount);
