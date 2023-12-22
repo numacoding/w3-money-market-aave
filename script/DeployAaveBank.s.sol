@@ -11,7 +11,9 @@ contract DeployAaveBank is Script {
         (
             address poolAddress,
             address daiAddress,
-            address usdcAddress
+            address usdcAddress,
+            address aDaiAddress,
+            address debtUsdcAddress
         ) = helperConfig.activeNetworkConfig();
 
         vm.startBroadcast();
